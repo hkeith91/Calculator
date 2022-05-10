@@ -1,0 +1,21 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color:azure ;
+}
+
+#screen{
+    min-height: 40px;
+    width: 100%;
+    margin:5px;
+    background-color: darkolivegreen;
+}
+
+#btns-container{
+    display: grid;
+    grid-template-columns: repeat(4, 20px);
+}
+
+
