@@ -30,6 +30,7 @@ body{
     border: 2px inset gray;
     border-radius: 2.5%;
     margin-bottom: 15px;
+    font-family: sans-serif;
 }
 
 .column{
@@ -48,6 +49,7 @@ body{
     height: 45px;
     border-radius: 50%;
     font-size: 1rem;
+    border: 2px solid gray;
 }
 
 
