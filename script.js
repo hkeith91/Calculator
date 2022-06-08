@@ -27,7 +27,7 @@ numbers.forEach((number) => {
     screenDisplay = numToDisplay.join("");
     screen.textContent = screenDisplay;
 
-    numA = undefined
+    !enteringNumB
       ? (numA = parseInt(screenDisplay))
       : (numB = parseInt(screenDisplay));
   });
@@ -36,7 +36,7 @@ numbers.forEach((number) => {
 //event listeners for operators
 operations.forEach((operation) => {
   operation.addEventListener("click", () => {
-    if (typeof numA !== "number") return;
+    if (typeof numA !== "number" || enteringNumB) return;
 
     if (currentOperator != undefined) {
       operations.forEach((operation) => {
@@ -77,33 +77,31 @@ function operate(operandOne, operandTwo, operation) {
   //results stored in 'numA' to allow for further calculations
   switch (operation) {
     case "plus":
-      console.log("A = " + typeof operandOne);
-      console.log("B = " + typeof operandTwo);
       numA = operandOne + operandTwo;
-      console.log("result = " + numA);
+      console.log(`${operandOne} + ${operandTwo}`);
+      console.log(operandOne + operandTwo);
       screen.textContent = numA;
-      console.log("screen = " + numA);
       partialReset();
       break;
     case "minus":
-      numA = parseInt(operandOne) - parseInt(operandTwo);
-      console.log("result = " + numA);
-      screen.textContent = numA;  
-      console.log("screen = " + numA);
+      numA = operandOne - operandTwo;
+      console.log(`${operandOne} - ${operandTwo}`);
+      console.log(operandOne - operandTwo);
+      screen.textContent = numA;
       partialReset();
       break;
     case "multiply":
       numA = operandOne * operandTwo;
-      console.log("result = " + numA);
+      console.log(`${operandOne} * ${operandTwo}`);
+      console.log(operandOne * operandTwo);
       screen.textContent = numA;
-      console.log("screen = " + numA);
       partialReset();
       break;
     case "divide":
       numA = operandOne / operandTwo;
-      console.log("screen = " + numA);
+      console.log(`${operandOne} / ${operandTwo}`);
+      console.log(operandOne / operandTwo);
       screen.textContent = numA;
-      console.log("screen = " + numA);
       partialReset();
       break;
   }
