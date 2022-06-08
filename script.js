@@ -5,6 +5,8 @@ const operations = Array.from(operationsNL);
 const screen = document.querySelector("#screen");
 const buttonsNL = document.querySelectorAll(".btn");
 const btns = Array.from(buttonsNL);
+const specOpsNL = document.querySelectorAll(".spec-op");
+const specOps = Array.from(specOpsNL);
 let numA;
 let numB;
 let currentOperator;
@@ -13,11 +15,7 @@ let enteringNumB = false;
 let screenDisplay;
 let numToDisplay = [];
 
-//if operandA == undefined add store value
-//if operandA and operation selected =>
-//  call Operate() when operandB has value and
-//  equals or another operator is added
-
+//event listeners for number btns
 numbers.forEach((number) => {
   number.addEventListener("click", () => {
     if (currentOperator != undefined && !enteringNumB) {
@@ -35,6 +33,7 @@ numbers.forEach((number) => {
   });
 });
 
+//event listeners for operators
 operations.forEach((operation) => {
   operation.addEventListener("click", () => {
     if (typeof numA !== "number") return;
@@ -57,3 +56,62 @@ operations.forEach((operation) => {
     console.log("operation = " + currentOperator);
   });
 });
+
+//event listeners for special keys
+specOps.forEach((special) => {
+  special.addEventListener("click", () => {
+    switch (special.id) {
+      case "equals":
+        if (
+          numA != undefined &&
+          numB != undefined &&
+          currentOperator != undefined
+        ) {
+          operate(numA, numB, currentOperator);
+        }
+    }
+  });
+});
+
+function operate(operandOne, operandTwo, operation) {
+  //results stored in 'numA' to allow for further calculations
+  switch (operation) {
+    case "plus":
+      console.log("A = " + typeof operandOne);
+      console.log("B = " + typeof operandTwo);
+      numA = operandOne + operandTwo;
+      console.log("result = " + numA);
+      screen.textContent = numA;
+      console.log("screen = " + numA);
+      partialReset();
+      break;
+    case "minus":
+      numA = parseInt(operandOne) - parseInt(operandTwo);
+      console.log("result = " + numA);
+      screen.textContent = numA;  
+      console.log("screen = " + numA);
+      partialReset();
+      break;
+    case "multiply":
+      numA = operandOne * operandTwo;
+      console.log("result = " + numA);
+      screen.textContent = numA;
+      console.log("screen = " + numA);
+      partialReset();
+      break;
+    case "divide":
+      numA = operandOne / operandTwo;
+      console.log("screen = " + numA);
+      screen.textContent = numA;
+      console.log("screen = " + numA);
+      partialReset();
+      break;
+  }
+}
+function partialReset() {
+  numB = undefined;
+  currentOperator = undefined;
+  operations.forEach((operation) => {
+    operation.classList.remove("op-select");
+  });
+}
