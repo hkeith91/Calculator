@@ -11,6 +11,7 @@ let numA;
 let numB;
 let currentOperator;
 let enteringNumB = false;
+let hasDecimal = false;
 
 let screenDisplay;
 let numToDisplay = [];
@@ -22,7 +23,14 @@ numbers.forEach((number) => {
       numToDisplay.length = 0;
       screen.textContent = "";
       enteringNumB = true;
+      console.log("entering B = " + enteringNumB);
     }
+    if(enteringNumB){
+      operations.forEach(operation => {
+        operation.classList.remove("op-select");
+      });
+    }
+    if(numToDisplay.length == 8) return;  
     numToDisplay.push(number.textContent);
     screenDisplay = numToDisplay.join("");
     screen.textContent = screenDisplay;
@@ -36,24 +44,27 @@ numbers.forEach((number) => {
 //event listeners for operators
 operations.forEach((operation) => {
   operation.addEventListener("click", () => {
-    if (typeof numA !== "number" || enteringNumB) return;
-
     if (currentOperator != undefined) {
       operations.forEach((operation) => {
-        console.log("removing highlight");
         operation.classList.remove("op-select");
       });
     }
-
-    operation.classList.toggle("op-select");
     if (currentOperator == operation.id) {
       currentOperator = undefined;
-      console.log("operation = " + currentOperator);
+      operation.classList.remove("op-select");
       return;
     }
 
+    operation.classList.toggle("op-select");
+    if(enteringNumB && numToDisplay.length > 0) {
+      numB = parseInt(screenDisplay);
+      console.log("b = " + numB);
+      console.log(currentOperator);
+      operate(numA, numB, currentOperator);
+    }
+    
+
     currentOperator = operation.id;
-    console.log("operation = " + currentOperator);
   });
 });
 
@@ -69,6 +80,9 @@ specOps.forEach((special) => {
         ) {
           operate(numA, numB, currentOperator);
         }
+        break;
+      case "clear":
+        fullReset();
     }
   });
 });
@@ -78,30 +92,22 @@ function operate(operandOne, operandTwo, operation) {
   switch (operation) {
     case "plus":
       numA = operandOne + operandTwo;
-      console.log(`${operandOne} + ${operandTwo}`);
-      console.log(operandOne + operandTwo);
-      screen.textContent = numA;
+      displayResult(numA);
       partialReset();
       break;
     case "minus":
       numA = operandOne - operandTwo;
-      console.log(`${operandOne} - ${operandTwo}`);
-      console.log(operandOne - operandTwo);
-      screen.textContent = numA;
+      displayResult(numA);
       partialReset();
       break;
     case "multiply":
       numA = operandOne * operandTwo;
-      console.log(`${operandOne} * ${operandTwo}`);
-      console.log(operandOne * operandTwo);
-      screen.textContent = numA;
+      displayResult(numA);
       partialReset();
       break;
     case "divide":
       numA = operandOne / operandTwo;
-      console.log(`${operandOne} / ${operandTwo}`);
-      console.log(operandOne / operandTwo);
-      screen.textContent = numA;
+      displayResult(numA);
       partialReset();
       break;
   }
@@ -109,7 +115,23 @@ function operate(operandOne, operandTwo, operation) {
 function partialReset() {
   numB = undefined;
   currentOperator = undefined;
+  enteringNumB = false;
   operations.forEach((operation) => {
     operation.classList.remove("op-select");
   });
+  numToDisplay.length = 0;
+}
+
+function fullReset(){
+  screen.textContent = "";
+  numToDisplay.length = 0;
+  numA = undefined;
+  numB = undefined;
+  currentOperator = undefined;
+}
+
+function displayResult(number){
+  let roundedNumber = Math.round(number * 1000000) / 1000000
+  console.log(roundedNumber);
+  screen.textContent = roundedNumber;
 }

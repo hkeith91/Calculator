@@ -11,7 +11,8 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 5px outset gray;
+    background-color: cornflowerblue;
+    border: 5px outset darkblue;
     padding: 13px;
     max-width: 230px;
     border-radius: 5%;;
@@ -49,7 +50,8 @@ body{
     height: 45px;
     border-radius: 50%;
     font-size: 1rem;
-    border: 2px solid gray;
+    background-color: aliceblue;
+    border: 2px solid darkgray;
 }
 
 .op-select{
