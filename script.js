@@ -20,9 +20,11 @@ let numToDisplay = [];
 //TODO:
 //--percent button
 //--positive/negative button
-//--recreate both nubers as objects with a hasDecimal property to
-// be checked before parsing --OR-- check every item in array for decimal
-// before parsing
+//-- dont' allow decimal after entering operation
+//--fix errors that occur when entering two decimal numbers
+//error around line 69-70.  having problems when trying to perform multiple
+// calculations with decimals without using equals button
+//--pressing decimal after entering operation should disply "0."
 
 //event listeners for number btns
 numbers.forEach((number) => {
@@ -45,8 +47,8 @@ numbers.forEach((number) => {
     updateScreen();
 
     !enteringNumB
-      ? (numA = parseInt(screenDisplay))
-      : (numB = parseInt(screenDisplay));
+      ? (numA = screenDisplay)
+      : (numB = screenDisplay);
   });
 });
 
@@ -103,7 +105,7 @@ specOps.forEach((special) => {
         break;
       case "decimal":
         console.log("decimal");
-        if(!hasDecimal) {
+        if(!hasDecimal && currentOperator == undefined) {
           hasDecimal = true;
           if(numToDisplay.length < 0) numToDisplay.push(0);
           numToDisplay.push(".");
@@ -114,32 +116,61 @@ specOps.forEach((special) => {
   });
 });
 
-function operate(operandOne, operandTwo, operation) {
+function operate(inputOne, inputTwo, operation) {
+  let operandOne = formatDecNumber(inputOne);
+  let operandTwo = formatDecNumber(inputTwo);
+
   //results stored in 'numA' to allow for further calculations
   switch (operation) {
     case "plus":
       numA = operandOne + operandTwo;
+      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       displayResult(numA);
       partialReset();
       break;
     case "minus":
       numA = operandOne - operandTwo;
+      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       displayResult(numA);
       partialReset();
       break;
     case "multiply":
       numA = operandOne * operandTwo;
-      console.log(`${numA} * ${numB} = ${numA * numB}`);
+      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       displayResult(numA);
       partialReset();
       break;
     case "divide":
       numA = operandOne / operandTwo;
+      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       displayResult(numA);
       partialReset();
       break;
   }
 }
+
+function checkForDecimal(number){
+  let check = number.split('');
+  let dec = false;
+  for (let i = 0; i < check.length; i++) {
+    const element = check[i];
+    if (element === ".") dec = true;
+  }
+  return dec;
+}
+
+function formatDecNumber(input){
+  if(!checkForDecimal(input)) return parseInt(input);
+  
+  let splitArr = input.split('.');
+  let len = splitArr[1].split('');
+  let output = parseInt(splitArr.join(''));
+  for (let i = 0; i < len.length; i++) {
+    output /= 10;
+  }
+  return output;
+}
+
 function partialReset() {
   numB = undefined;
   currentOperator = undefined;
