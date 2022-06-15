@@ -16,6 +16,14 @@ let hasDecimal = false;
 let screenDisplay;
 let numToDisplay = [];
 
+//
+//TODO:
+//--percent button
+//--positive/negative button
+//--recreate both nubers as objects with a hasDecimal property to
+// be checked before parsing --OR-- check every item in array for decimal
+// before parsing
+
 //event listeners for number btns
 numbers.forEach((number) => {
   number.addEventListener("click", () => {
@@ -23,17 +31,18 @@ numbers.forEach((number) => {
       numToDisplay.length = 0;
       screen.textContent = "";
       enteringNumB = true;
-      console.log("entering B = " + enteringNumB);
+      hasDecimal = false;
     }
+    
     if(enteringNumB){
       operations.forEach(operation => {
         operation.classList.remove("op-select");
       });
     }
     if(numToDisplay.length == 8) return;  
+    
     numToDisplay.push(number.textContent);
-    screenDisplay = numToDisplay.join("");
-    screen.textContent = screenDisplay;
+    updateScreen();
 
     !enteringNumB
       ? (numA = parseInt(screenDisplay))
@@ -83,6 +92,24 @@ specOps.forEach((special) => {
         break;
       case "clear":
         fullReset();
+        break;
+      case "backspace":
+        if(numToDisplay.length > 0) {
+          if(numToDisplay[numToDisplay.length - 1] == ".")
+            hasDecimal = false;
+          numToDisplay.pop();
+          updateScreen();
+        }
+        break;
+      case "decimal":
+        console.log("decimal");
+        if(!hasDecimal) {
+          hasDecimal = true;
+          if(numToDisplay.length < 0) numToDisplay.push(0);
+          numToDisplay.push(".");
+          updateScreen();
+        }
+        break;
     }
   });
 });
@@ -102,6 +129,7 @@ function operate(operandOne, operandTwo, operation) {
       break;
     case "multiply":
       numA = operandOne * operandTwo;
+      console.log(`${numA} * ${numB} = ${numA * numB}`);
       displayResult(numA);
       partialReset();
       break;
@@ -116,6 +144,7 @@ function partialReset() {
   numB = undefined;
   currentOperator = undefined;
   enteringNumB = false;
+  hasDecimal = false;
   operations.forEach((operation) => {
     operation.classList.remove("op-select");
   });
@@ -128,10 +157,16 @@ function fullReset(){
   numA = undefined;
   numB = undefined;
   currentOperator = undefined;
+  hasDecimal = false;
 }
 
 function displayResult(number){
   let roundedNumber = Math.round(number * 1000000) / 1000000
   console.log(roundedNumber);
   screen.textContent = roundedNumber;
+}
+
+function updateScreen(){
+  screenDisplay = numToDisplay.join("");
+  screen.textContent = screenDisplay;
 }
