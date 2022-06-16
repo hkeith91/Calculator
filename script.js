@@ -35,20 +35,18 @@ numbers.forEach((number) => {
       enteringNumB = true;
       hasDecimal = false;
     }
-    
-    if(enteringNumB){
-      operations.forEach(operation => {
+
+    if (enteringNumB) {
+      operations.forEach((operation) => {
         operation.classList.remove("op-select");
       });
     }
-    if(numToDisplay.length == 8) return;  
-    
+    if (numToDisplay.length == 8) return;
+
     numToDisplay.push(number.textContent);
     updateScreen();
 
-    !enteringNumB
-      ? (numA = screenDisplay)
-      : (numB = screenDisplay);
+    !enteringNumB ? (numA = screenDisplay) : (numB = screenDisplay);
   });
 });
 
@@ -67,13 +65,12 @@ operations.forEach((operation) => {
     }
 
     operation.classList.toggle("op-select");
-    if(enteringNumB && numToDisplay.length > 0) {
+    if (enteringNumB && numToDisplay.length > 0) {
       numB = parseInt(screenDisplay);
       console.log("b = " + numB);
       console.log(currentOperator);
       operate(numA, numB, currentOperator);
     }
-    
 
     currentOperator = operation.id;
   });
@@ -96,18 +93,17 @@ specOps.forEach((special) => {
         fullReset();
         break;
       case "backspace":
-        if(numToDisplay.length > 0) {
-          if(numToDisplay[numToDisplay.length - 1] == ".")
-            hasDecimal = false;
+        if (numToDisplay.length > 0) {
+          if (numToDisplay[numToDisplay.length - 1] == ".") hasDecimal = false;
           numToDisplay.pop();
           updateScreen();
         }
         break;
       case "decimal":
         console.log("decimal");
-        if(!hasDecimal && currentOperator == undefined) {
+        if (!hasDecimal && currentOperator == undefined) {
           hasDecimal = true;
-          if(numToDisplay.length < 0) numToDisplay.push(0);
+          if (numToDisplay.length < 0) numToDisplay.push(0);
           numToDisplay.push(".");
           updateScreen();
         }
@@ -124,33 +120,28 @@ function operate(inputOne, inputTwo, operation) {
   switch (operation) {
     case "plus":
       numA = operandOne + operandTwo;
-      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
-      displayResult(numA);
-      partialReset();
+      // console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       break;
     case "minus":
       numA = operandOne - operandTwo;
-      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
-      displayResult(numA);
-      partialReset();
+      // console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       break;
     case "multiply":
       numA = operandOne * operandTwo;
-      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
-      displayResult(numA);
-      partialReset();
+      // console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       break;
     case "divide":
       numA = operandOne / operandTwo;
-      console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
-      displayResult(numA);
-      partialReset();
+      // console.log(`${operandOne} + ${operandTwo} = ${operandOne + operandTwo}`);
       break;
   }
+  displayResult(numA);
+  partialReset();
 }
 
-function checkForDecimal(number){
-  let check = number.split('');
+function checkForDecimal(input) {
+  if (typeof input === "number") input = input.toString();
+  let check = input.split("");
   let dec = false;
   for (let i = 0; i < check.length; i++) {
     const element = check[i];
@@ -159,12 +150,12 @@ function checkForDecimal(number){
   return dec;
 }
 
-function formatDecNumber(input){
-  if(!checkForDecimal(input)) return parseInt(input);
-  
-  let splitArr = input.split('.');
-  let len = splitArr[1].split('');
-  let output = parseInt(splitArr.join(''));
+function formatDecNumber(input) {
+  if (!checkForDecimal(input)) return parseInt(input);
+
+  let splitArr = input.split(".");
+  let len = splitArr[1].split("");
+  let output = parseInt(splitArr.join(""));
   for (let i = 0; i < len.length; i++) {
     output /= 10;
   }
@@ -182,7 +173,7 @@ function partialReset() {
   numToDisplay.length = 0;
 }
 
-function fullReset(){
+function fullReset() {
   screen.textContent = "";
   numToDisplay.length = 0;
   numA = undefined;
@@ -191,13 +182,13 @@ function fullReset(){
   hasDecimal = false;
 }
 
-function displayResult(number){
-  let roundedNumber = Math.round(number * 1000000) / 1000000
+function displayResult(number) {
+  let roundedNumber = Math.round(number * 1000000) / 1000000;
   console.log(roundedNumber);
   screen.textContent = roundedNumber;
 }
 
-function updateScreen(){
+function updateScreen() {
   screenDisplay = numToDisplay.join("");
   screen.textContent = screenDisplay;
 }
